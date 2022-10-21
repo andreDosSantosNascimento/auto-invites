@@ -1,12 +1,13 @@
 import { createGlobalStyle } from "styled-components";
 
-const GlobalStyle= createGlobalStyle`
+const GlobalStyle = createGlobalStyle`
 body{
     background-color: #1c1c1c;
     color: #ffffff;
     font-family: sans-serif;
 }
-`
-export {
-    GlobalStyle
+button { 
+    cursor: pointer;
 }
+`;
+export { GlobalStyle };

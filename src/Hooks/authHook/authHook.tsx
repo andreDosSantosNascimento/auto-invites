@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { PropsProvider } from "../../Types";
 import { ContextInterface } from "./types";
 
@@ -6,12 +6,12 @@ const authContext = createContext({} as ContextInterface);
 export const AuthProvider = ({ children }: PropsProvider) => {
     const [accessTokenSheets, setAccessTokenSheets] = useState(() => {
         const token = localStorage.getItem("@autoInvite/SheetsToken");
-        return token ? token : "";
+        return token ? JSON.parse(token) : "";
     });
 
     const [accessTokenCalendar, setAccessTokenCalendar] = useState(() => {
         const token = localStorage.getItem("@autoInvite/CalendarToken");
-        return token ? token : "";
+        return token ? JSON.parse(token) : "";
     });
 
     const oauthSignIn = (scope: string) => {
@@ -59,9 +59,25 @@ export const AuthProvider = ({ children }: PropsProvider) => {
     const handleSetTokenCalendar = (token: string) => {
         setAccessTokenCalendar(token);
     };
+
     const handleSetTokenSheets = (token: string) => {
         setAccessTokenSheets(token);
     };
+
+    useEffect(() => {
+        if (accessTokenCalendar) {
+            handleSaveCalendarToken();
+        }
+        // eslint-disable-next-line
+    }, [accessTokenCalendar]);
+
+    useEffect(() => {
+        if (accessTokenSheets) {
+            handleSaveSheetsToken();
+        }
+        // eslint-disable-next-line
+    }, [accessTokenSheets]);
+
     return (
         <authContext.Provider
             value={{
