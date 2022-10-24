@@ -57,7 +57,12 @@ export const HomePage = () => {
 
     useEffect(() => {
         if (sheet) {
-            sheet.splice(0, 1);
+            if (sheet[0]) {
+                if (sheet[0][0] === "titulo") {
+                    sheet.splice(0, 1);
+                }
+            }
+
             const handleEvent = sheet.map((currentElement, index) => {
                 const [
                     titulo,
@@ -76,7 +81,7 @@ export const HomePage = () => {
                     calendarId: donoEmail,
                     summary: `${titulo} - ${convidadoName}`,
                     location: "",
-                    description: `Aplicador: ${aplicadorName}\n${description}`,
+                    description: `${description}`,
                     start: {
                         dateTime: `${dia}T${horaComeco}-03:00`,
                         timeZone: "America/Sao_Paulo",
@@ -109,6 +114,22 @@ export const HomePage = () => {
     useEffect(() => {
         // eslint-disable-next-line
         url = window.location.href.replaceAll("&", "/").split("/");
+
+        const lastAccess = new Date(
+            localStorage.getItem("@autoInvite/acesso") || ""
+        );
+
+        if (lastAccess) {
+            if (lastAccess.getHours() !== new Date().getHours()) {
+                localStorage.clear();
+                navegate("/");
+            }
+        } else {
+            localStorage.setItem(
+                "@autoInvite/acesso",
+                JSON.stringify(new Date().toLocaleString())
+            );
+        }
 
         if (url.length > 4) {
             const scope = url[url.length - 1];
@@ -180,19 +201,28 @@ export const HomePage = () => {
                         return (
                             <li key={index}>
                                 <div>
-                                    <h3>{current.summary}</h3>
-                                    <p>{`Start: ${new Date(
+                                    <h4>{current.summary}</h4>
+                                    <p>{current.description}</p>
+                                    <p>{`Começa: ${new Date(
                                         current.start.dateTime
                                     ).toLocaleDateString()} - ${new Date(
                                         current.start.dateTime
                                     ).toLocaleTimeString()}`}</p>
-                                    <p>{`End: ${new Date(
+                                    <p>{`Termina: ${new Date(
                                         current.end.dateTime
                                     ).toLocaleDateString()} - ${new Date(
                                         current.end.dateTime
                                     ).toLocaleTimeString()}`}</p>
                                 </div>
                                 <div>
+                                    <h4>Convidados</h4>
+                                    <ul>
+                                        {current.attendees.map((guest: any) => {
+                                            return <li>{guest.email}</li>;
+                                        })}
+                                    </ul>
+                                </div>
+                                <div className="li-buttons">
                                     <button
                                         className="delete"
                                         onClick={() => {

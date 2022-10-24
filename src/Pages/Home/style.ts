@@ -56,10 +56,11 @@ export const Container = styled.div`
         padding: 0;
     }
     li {
+        height: 200px;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
         box-sizing: border-box;
         padding: 0 16px;
         list-style: none;
@@ -72,6 +73,12 @@ export const Container = styled.div`
         -moz-box-shadow: 0px 0px 2px 2px rgba(28, 28, 28, 0.2);
     }
 
+    ul li div.li-buttons {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
     ul li button {
         background-color: #34a853;
         color: #ffffff;
@@ -87,6 +94,14 @@ export const Container = styled.div`
         background-color: #d8001d;
         border-radius: 10px 0 0 10px;
         font-weight: 700;
+        text-align: center;
+    }
+
+    ul li div li {
+        box-sizing: border-box;
+        height: max-content;
+        width: max-content;
+        padding: 2px;
     }
 `;
 
