@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Hooks/authHook/authHook";
-import { Container } from "./style";
+import { Container, Form } from "./style";
 
 export const HomePage = () => {
     const [sheet, setSheet] = useState([]);
@@ -50,14 +50,14 @@ export const HomePage = () => {
                 },
             }
         );
-        if (response.status === 200) {
-            events.splice(index, 1);
-            setEvents([...events]);    
-        }
+
+        events.splice(index, 1);
+        setEvents([...events]);
     };
 
     useEffect(() => {
         if (sheet) {
+            sheet.splice(0, 1);
             const handleEvent = sheet.map((currentElement, index) => {
                 const [
                     titulo,
@@ -72,42 +72,35 @@ export const HomePage = () => {
                     description,
                 ] = currentElement;
 
-                let body = {};
-
-                if (index) {
-                    body = {
-                        calendarId: donoEmail,
-                        summary: `${titulo} - ${convidadoName}`,
-                        location: "",
-                        description: `Aplicador: ${aplicadorName}\n${description}`,
-                        start: {
-                            dateTime: `${dia}T${horaComeco}-03:00`,
-                            timeZone: "America/Sao_Paulo",
-                        },
-                        end: {
-                            dateTime: `${dia}T${horaFim}-03:00`,
-                            timeZone: "America/Sao_Paulo",
-                        },
-                        recurrence: [],
-                        attendees: [
-                            { email: aplicadorEmail },
-                            { email: convidadoEmail },
+                let body = {
+                    calendarId: donoEmail,
+                    summary: `${titulo} - ${convidadoName}`,
+                    location: "",
+                    description: `Aplicador: ${aplicadorName}\n${description}`,
+                    start: {
+                        dateTime: `${dia}T${horaComeco}-03:00`,
+                        timeZone: "America/Sao_Paulo",
+                    },
+                    end: {
+                        dateTime: `${dia}T${horaFim}-03:00`,
+                        timeZone: "America/Sao_Paulo",
+                    },
+                    recurrence: [],
+                    attendees: [
+                        { email: aplicadorEmail },
+                        { email: convidadoEmail },
+                    ],
+                    reminders: {
+                        useDefault: false,
+                        overrides: [
+                            { method: "email", minutes: 24 * 60 },
+                            { method: "popup", minutes: 10 },
                         ],
-                        reminders: {
-                            useDefault: false,
-                            overrides: [
-                                { method: "email", minutes: 24 * 60 },
-                                { method: "popup", minutes: 10 },
-                            ],
-                        },
-                    };
-
-                    return body;
-                }
+                    },
+                };
 
                 return body;
             });
-            handleEvent.splice(0, 1);
             setEvents(handleEvent);
         }
         // eslint-disable-next-line
@@ -151,9 +144,21 @@ export const HomePage = () => {
                 >
                     Acesso ao Calendar
                 </button>
+                {accessTokenCalendar && accessTokenSheets && (
+                    <button
+                        className="logout"
+                        onClick={() => {
+                            localStorage.clear();
+                            handleSetTokenCalendar("");
+                            handleSetTokenSheets("");
+                        }}
+                    >
+                        Logout
+                    </button>
+                )}
             </div>
             {accessTokenCalendar && accessTokenSheets && (
-                <form
+                <Form
                     action="#"
                     onSubmit={(e) => {
                         e.preventDefault();
@@ -161,23 +166,50 @@ export const HomePage = () => {
                     }}
                 >
                     <input type="text" placeholder="Spreadsheet ID" />
-                    <input type="text" placeholder="Range" />
+                    <input
+                        type="text"
+                        placeholder='Range (Exemplo: "Sheet!A:J" ou "A:J")'
+                    />
+
                     <button type="submit">Buscar dados</button>
-                </form>
+                </Form>
             )}
             {sheet && (
                 <ul>
                     {events.map((current: any, index: number) => {
                         return (
                             <li key={index}>
-                                <h3>{current.summary}</h3>
-                                <button
-                                    onClick={() =>
-                                        handleInsertEvent(current, index)
-                                    }
-                                >
-                                    Criar
-                                </button>
+                                <div>
+                                    <h3>{current.summary}</h3>
+                                    <p>{`Start: ${new Date(
+                                        current.start.dateTime
+                                    ).toLocaleDateString()} - ${new Date(
+                                        current.start.dateTime
+                                    ).toLocaleTimeString()}`}</p>
+                                    <p>{`End: ${new Date(
+                                        current.end.dateTime
+                                    ).toLocaleDateString()} - ${new Date(
+                                        current.end.dateTime
+                                    ).toLocaleTimeString()}`}</p>
+                                </div>
+                                <div>
+                                    <button
+                                        className="delete"
+                                        onClick={() => {
+                                            events.splice(index, 1);
+                                            setEvents([...events]);
+                                        }}
+                                    >
+                                        X
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            handleInsertEvent(current, index)
+                                        }
+                                    >
+                                        ►
+                                    </button>
+                                </div>
                             </li>
                         );
                     })}

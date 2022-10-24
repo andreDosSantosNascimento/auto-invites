@@ -18,7 +18,7 @@ export const Container = styled.div`
     div.buttons {
         width: 85%;
         padding-bottom: 10px;
-        border-bottom: 1px solid #1c1c1c;
+        border-bottom: 1px solid #1c1c1c50;
         box-sizing: border-box;
         display: flex;
         justify-content: center;
@@ -36,11 +36,99 @@ export const Container = styled.div`
         height: 32px;
     }
 
+    div.buttons button.logout {
+        background-color: #d8001d;
+        font-weight: 700;
+    }
+
     div.buttons button:disabled {
         cursor: default;
         background-color: #d9ead3;
         border: 1px solid #34a853;
         color: #34a853;
         text-decoration: line-through;
+    }
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+        padding: 0;
+    }
+    li {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+        padding: 0 16px;
+        list-style: none;
+        background-color: #ffffff;
+        color: #1c1c1c;
+        border-radius: 8px;
+        margin: 4px 0;
+        box-shadow: 0px 0px 2px 2px rgba(28, 28, 28, 0.2);
+        -webkit-box-shadow: 0px 0px 2px 2px rgba(28, 28, 28, 0.2);
+        -moz-box-shadow: 0px 0px 2px 2px rgba(28, 28, 28, 0.2);
+    }
+
+    ul li button {
+        background-color: #34a853;
+        color: #ffffff;
+        width: 40px;
+        height: 100px;
+        box-shadow: 0px 0px 2px 2px rgba(28, 28, 28, 0.2);
+        -webkit-box-shadow: 0px 0px 2px 2px rgba(28, 28, 28, 0.2);
+        -moz-box-shadow: 0px 0px 2px 2px rgba(28, 28, 28, 0.2);
+        border: none;
+        border-radius: 0 100px 100px 0;
+    }
+    ul li button.delete {
+        background-color: #d8001d;
+        border-radius: 10px 0 0 10px;
+        font-weight: 700;
+    }
+`;
+
+export const Form = styled.form`
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 20px;
+
+    input {
+        box-sizing: border-box;
+        width: 100%;
+        margin: 4px 0;
+        padding: 0 16px;
+        height: 32px;
+        outline: none;
+        border: none;
+        border-radius: 4px;
+        box-shadow: 0px 0px 2px 2px rgba(28, 28, 28, 0.2);
+        -webkit-box-shadow: 0px 0px 2px 2px rgba(28, 28, 28, 0.2);
+        -moz-box-shadow: 0px 0px 2px 2px rgba(28, 28, 28, 0.2);
+    }
+
+    input::placeholder {
+        padding-left: 2px;
+    }
+
+    button {
+        transition: 0.2s;
+        margin-top: 16px;
+        width: 100px;
+        border: none;
+        height: 32px;
+        border-radius: 4px;
+        box-shadow: 0px 0px 2px 2px rgba(28, 28, 28, 0.2);
+        -webkit-box-shadow: 0px 0px 2px 2px rgba(28, 28, 28, 0.2);
+        -moz-box-shadow: 0px 0px 2px 2px rgba(28, 28, 28, 0.2);
+    }
+
+    button:hover {
+        background-color: #1c1c1c10;
     }
 `;
